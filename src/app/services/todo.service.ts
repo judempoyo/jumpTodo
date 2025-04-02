@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 
 export interface Todo {
   id: number;
@@ -28,12 +28,12 @@ export class TodoService {
     try {
       const savedTodos = localStorage.getItem(this.STORAGE_KEY);
       if (savedTodos) {
-        const todos = JSON.parse(savedTodos).map((todo: any) => ({
+        const todos = JSON.parse(savedTodos);
+        this.todosSubject.next(todos.map((todo: any) => ({
           ...todo,
           createdAt: new Date(todo.createdAt),
           updatedAt: todo.updatedAt ? new Date(todo.updatedAt) : undefined
-        }));
-        this.todosSubject.next(todos);
+        })));
       }
     } catch (error) {
       console.error('Failed to load todos:', error);
@@ -54,6 +54,7 @@ export class TodoService {
     };
 
     return this.updateTodos([...this.todos, newTodo]).pipe(
+      map(todos => todos.find(t => t.id === newTodo.id)!),
       tap(() => console.log('Todo added successfully')),
       catchError(error => {
         console.error('Error adding todo:', error);
@@ -83,6 +84,7 @@ export class TodoService {
     }
 
     return this.updateTodos(updatedTodos).pipe(
+      map(() => updatedTodo),
       tap(() => console.log('Todo updated successfully')),
       catchError(error => {
         console.error('Error updating todo:', error);
@@ -108,6 +110,7 @@ export class TodoService {
     }
 
     return this.updateTodos(updatedTodos).pipe(
+      map(() => updatedTodo),
       tap(() => console.log('Todo toggled successfully')),
       catchError(error => {
         console.error('Error toggling todo:', error);
@@ -119,8 +122,8 @@ export class TodoService {
   deleteTodo(id: number): Observable<boolean> {
     const updatedTodos = this.todos.filter(todo => todo.id !== id);
     return this.updateTodos(updatedTodos).pipe(
-      tap(() => console.log('Todo deleted successfully')),
       map(() => true),
+      tap(() => console.log('Todo deleted successfully')),
       catchError(error => {
         console.error('Error deleting todo:', error);
         throw error;

@@ -3,13 +3,14 @@ import { TodoService } from '../../services/todo.service';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Todo } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
   imports: [NgClass, FormsModule, AsyncPipe],
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.scss'],
+  styleUrls: ['./todo-list.component.css'], 
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
@@ -48,10 +49,16 @@ export class TodoListComponent {
     if (event.detail === 2) { // Double-clic
       this.startEdit(todo);
     }
-  } 
-  startEdit(todo: { id: number, text: string }) {
+  }
+
+  startEdit(todo: Todo) {
     this.editingTodoId = todo.id;
     this.newTodoText = todo.text;
+    setTimeout(() => {
+      const inputElement = document.querySelector('input[ngModel]') as HTMLInputElement;
+      inputElement?.focus();
+      inputElement?.select();
+    }, 50);
   }
 
   resetEdit() {
