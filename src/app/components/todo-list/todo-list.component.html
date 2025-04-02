@@ -39,16 +39,21 @@
         @for (todo of todoService.todos$ | async; track todo.id) {
         <li @fadeInOut (click)="handleTodoClick(todo, $event)"
           class="p-4 hover:bg-gray-900/20 dark:hover:bg-teal-900/20 transition-all duration-200 cursor-pointer flex items-center gap-3 group
-                 active:bg-teal-100/50 dark:active:bg-teal-900/30"
+                 active:bg-teal-100/50 dark:active:bg-teal-900/30 mb-4 shadow-lg"
           [class.bg-teal-160]="editingTodoId === todo.id"
           [class.dark:bg-teal-30]="editingTodoId === todo.id">
 
           <input type="checkbox"
-            [checked]="todo.done"
-            (change)="todoService.toggleTodo(todo.id).subscribe()"
-            class="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500
-                   dark:border-gray-500 dark:bg-gray-700 dark:checked:bg-teal-500
-                   cursor-pointer transition-colors hover:border-teal-400 dark:hover:border-teal-400" />
+          [checked]="todo.done"
+          (change)="todoService.toggleTodo(todo.id).subscribe()"
+          class="h-6 w-6 appearance-none rounded-md border-2 border-gray-300 dark:border-gray-500
+                 bg-white dark:bg-gray-700
+                 checked:bg-teal-500 checked:border-teal-500 dark:checked:bg-teal-600 dark:checked:border-teal-600
+                 focus:outline-none focus:ring-2 focus:ring-teal-200 dark:focus:ring-teal-800
+                 cursor-pointer transition-all duration-150 ease-in-out
+                 relative after:absolute after:content-[''] after:flex after:justify-center after:items-center
+                 after:inset-0 after:bg-no-repeat after:bg-center
+                 checked:after:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDZMMTAgMThsLTUtNSIvPjwvc3ZnPg==')]">
 
           <span class="flex-1 text-gray-800 dark:text-gray-200 transition-all duration-200"
             [class.line-through]="todo.done"
