@@ -1,0 +1,83 @@
+<div class="min-h-screen transition-all duration-300 ease-in-out"
+     [ngClass]="{ 'dark bg-gray-900': isDarkMode, 'bg-gray-50': !isDarkMode }">
+  <div class="max-w-md mx-auto p-6">
+    <!-- Header avec animation -->
+    <div class="flex justify-between items-center mb-8" @fadeInOut>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+        Todo App
+      </h1>
+      <button
+        (click)="toggleDarkMode()"
+        class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition-transform duration-200"
+        aria-label="Toggle dark mode"
+      >
+        <span class="text-xl">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+      </button>
+    </div>
+
+    <!-- Formulaire d'ajout -->
+    <div class="flex gap-2 mb-6" @fadeInOut>
+      <input
+        [(ngModel)]="newTodoText"
+        (keyup.enter)="addTodo()"
+        placeholder="What needs to be done?"
+        class="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-purple-500 transition-all duration-200"
+      />
+      <button
+        (click)="addTodo()"
+        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white rounded-lg transition-all duration-200 flex items-center gap-1"
+      >
+        <span>Add</span>
+        <span class="text-sm">⏎</span>
+      </button>
+    </div>
+
+    <!-- Liste des todos avec animations -->
+    <ul class="space-y-2" @listAnimation>
+      @for (todo of todoService.todos$ | async; track todo.id) {
+        <li
+          @fadeInOut
+          class="group p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex items-center gap-3 bg-white dark:bg-gray-800 hover:shadow-md transition-all duration-200"
+        >
+          <label class="flex items-center space-x-3 cursor-pointer flex-1">
+            <input
+              type="checkbox"
+              [checked]="todo.done"
+              (change)="todoService.toggleTodo(todo.id)"
+              class="h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-indigo-600 dark:text-purple-500 focus:ring-indigo-500 dark:focus:ring-purple-500 bg-white dark:bg-gray-800 transition-colors duration-200"
+            />
+            <span
+              [ngClass]="{
+                'line-through text-gray-400 dark:text-gray-500': todo.done,
+                'text-gray-800 dark:text-gray-200': !todo.done
+              }"
+              class="transition-all duration-200"
+            >
+              {{ todo.text }}
+            </span>
+          </label>
+          <button
+            (click)="todoService.deleteTodo(todo.id)"
+            class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 p-1"
+            aria-label="Delete todo"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </li>
+      } @empty {
+        <div @fadeInOut class="text-center py-8">
+          <p class="text-gray-500 dark:text-gray-400 mb-2">Your todo list is empty</p>
+          <p class="text-sm text-gray-400 dark:text-gray-500">Start by adding a new task above</p>
+        </div>
+      }
+    </ul>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400" @fadeInOut>
+      <p>Double-click to edit a todo</p>
+      <p class="mt-1">{{ (todoService.todos$ | async)?.length || 0 }} items left</p>
+    </div>
+  </div>
+</div>
