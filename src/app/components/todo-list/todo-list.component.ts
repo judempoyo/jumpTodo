@@ -1,39 +1,24 @@
 import { Component, inject } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { NgClass, NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { animate, style, transition, trigger, query, stagger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Todo } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgFor, NgIf, NgClass, FormsModule, AsyncPipe],
+  imports: [NgClass, FormsModule, AsyncPipe],
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.css'],
+  styleUrls: ['./todo-list.component.css'], 
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-20px)' }),
-        animate('200ms ease-out',
-          style({ opacity: 1, transform: 'translateY(0)' })
-        )
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('150ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ]),
       transition(':leave', [
-        animate('200ms ease-in',
-          style({ opacity: 0, transform: 'translateX(100px)' })
-        )
-      ])
-    ]),
-    trigger('listAnimation', [
-      transition('* => *', [
-        query(':enter', [
-          style({ opacity: 0, transform: 'scale(0.9)' }),
-          stagger(100, [
-            animate('300ms ease-out',
-              style({ opacity: 1, transform: 'scale(1)' })
-            )
-          ])
-        ], { optional: true })
+        animate('150ms ease-in', style({ opacity: 0, transform: 'translateX(20px)' }))
       ])
     ])
   ]
@@ -42,12 +27,43 @@ export class TodoListComponent {
   todoService = inject(TodoService);
   newTodoText = '';
   isDarkMode = false;
+  editingTodoId: number | null = null;
 
-  addTodo() {
-    if (this.newTodoText.trim()) {
-      this.todoService.addTodo(this.newTodoText);
-      this.newTodoText = '';
+  addOrUpdateTodo() {
+    if (!this.newTodoText.trim()) return;
+
+    if (this.editingTodoId) {
+      this.todoService.updateTodo(this.editingTodoId, this.newTodoText).subscribe({
+        next: () => this.resetEdit(),
+        error: (err) => console.error(err)
+      });
+    } else {
+      this.todoService.addTodo(this.newTodoText).subscribe({
+        next: () => this.resetEdit(),
+        error: (err) => console.error(err)
+      });
     }
+  }
+
+  handleTodoClick(todo: Todo, event: MouseEvent) {
+    if (event.detail === 2) { // Double-clic
+      this.startEdit(todo);
+    }
+  }
+
+  startEdit(todo: Todo) {
+    this.editingTodoId = todo.id;
+    this.newTodoText = todo.text;
+    setTimeout(() => {
+      const inputElement = document.querySelector('input[ngModel]') as HTMLInputElement;
+      inputElement?.focus();
+      inputElement?.select();
+    }, 50);
+  }
+
+  resetEdit() {
+    this.editingTodoId = null;
+    this.newTodoText = '';
   }
 
   toggleDarkMode() {
