@@ -1,43 +1,51 @@
-/* Transition de base */
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+:host {
+  display: block;
 }
 
-/* Effets de survol personnalisés */
-button {
-  &:active {
-    transform: scale(0.95);
-  }
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Animation personnalisée pour les todos */
-.todo-item {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
-/* Mode sombre personnalisé */
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 4px;
+}
+
 .dark {
-  .todo-item {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+  ::-webkit-scrollbar-track {
+    background: #374151;
+  }
 
-    &:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-    }
+  ::-webkit-scrollbar-thumb {
+    background: #4b5563;
   }
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .container {
-    padding: 1rem;
-  }
+/* Animation de l'item en cours d'édition */
+[class.bg-indigo-50\\/50] {
+  animation: pulse 2s infinite;
+}
 
-  input {
-    font-size: 0.9rem;
+@keyframes pulse {
+  0% { background-color: rgba(238, 242, 255, 0.5); }
+  50% { background-color: rgba(224, 231, 255, 0.7); }
+  100% { background-color: rgba(238, 242, 255, 0.5); }
+}
+
+.dark {
+  [class.bg-indigo-50\\/50] {
+    animation: pulse-dark 2s infinite;
   }
+}
+
+@keyframes pulse-dark {
+  0% { background-color: rgba(55, 48, 163, 0.3); }
+  50% { background-color: rgba(67, 56, 202, 0.5); }
+  100% { background-color: rgba(55, 48, 163, 0.3); }
 }
