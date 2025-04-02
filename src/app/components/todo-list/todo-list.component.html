@@ -1,0 +1,63 @@
+<div class="min-h-screen transition-colors duration-300" [ngClass]="{ 'dark bg-gray-900 text-white': isDarkMode, 'bg-gray-50': !isDarkMode }">
+  <div class="max-w-md mx-auto p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">Todo App</h1>
+      <button
+        (click)="toggleDarkMode()"
+        class="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
+      >
+        {{ isDarkMode ? '☀️' : '🌙' }}
+      </button>
+    </div>
+
+    <!-- Add Todo -->
+    <div class="flex gap-2 mb-6">
+      <input
+        [(ngModel)]="newTodoText"
+        (keyup.enter)="addTodo()"
+        placeholder="What needs to be done?"
+        class="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <button
+        (click)="addTodo()"
+        class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+      >
+        Add
+      </button>
+    </div>
+
+    <!-- Todo List -->
+    <ul class="space-y-3">
+      @for (todo of todoService.todos$ | async; track todo.id) {
+        <li
+          @fadeInOut
+          class="p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex items-center gap-3 bg-white dark:bg-gray-800"
+        >
+          <input
+            type="checkbox"
+            [checked]="todo.done"
+            (change)="todoService.toggleTodo(todo.id)"
+            class="h-5 w-5 rounded text-indigo-600 focus:ring-indigo-500"
+          />
+          <span
+            [ngClass]="{ 'line-through text-gray-400 dark:text-gray-500': todo.done }"
+            class="flex-1"
+          >
+            {{ todo.text }}
+          </span>
+          <button
+            (click)="todoService.deleteTodo(todo.id)"
+            class="text-red-500 hover:text-red-700 transition-colors"
+          >
+            ✕
+          </button>
+        </li>
+      } @empty {
+        <p class="text-center text-gray-500 dark:text-gray-400 py-4">
+          No todos yet. Add one above!
+        </p>
+      }
+    </ul>
+  </div>
+</div>
