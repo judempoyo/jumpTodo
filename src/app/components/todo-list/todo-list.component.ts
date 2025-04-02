@@ -9,7 +9,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
   standalone: true,
   imports: [NgClass, FormsModule, AsyncPipe],
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.css'],
+  styleUrls: ['./todo-list.component.scss'],
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
@@ -26,40 +26,50 @@ export class TodoListComponent {
   todoService = inject(TodoService);
   newTodoText = '';
   isDarkMode = false;
-  editingTodo: { id: number, text: string } | null = null;
+  editingTodoId: number | null = null;
 
-  addTodo() {
-    if (this.newTodoText.trim()) {
-      if (this.editingTodo) {
-        this.todoService.updateTodo(this.editingTodo.id, this.newTodoText);
-        this.editingTodo = null;
-      } else {
-        this.todoService.addTodo(this.newTodoText);
-      }
-      this.newTodoText = '';
+  addOrUpdateTodo() {
+    if (!this.newTodoText.trim()) return;
+
+    if (this.editingTodoId) {
+      this.todoService.updateTodo(this.editingTodoId, this.newTodoText).subscribe({
+        next: () => this.resetEdit(),
+        error: (err) => console.error(err)
+      });
+    } else {
+      this.todoService.addTodo(this.newTodoText).subscribe({
+        next: () => this.resetEdit(),
+        error: (err) => console.error(err)
+      });
     }
   }
 
+  handleTodoClick(todo: Todo, event: MouseEvent) {
+    if (event.detail === 2) { // Double-clic
+      this.startEdit(todo);
+    }
+  } 
   startEdit(todo: { id: number, text: string }) {
-    this.editingTodo = todo;
+    this.editingTodoId = todo.id;
     this.newTodoText = todo.text;
   }
 
-  cancelEdit() {
-    this.editingTodo = null;
+  resetEdit() {
+    this.editingTodoId = null;
     this.newTodoText = '';
   }
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
     document.documentElement.classList.toggle('dark', this.isDarkMode);
+    localStorage.setItem('darkMode', this.isDarkMode.toString());
   }
 
-  get activeCount() {
-    return this.todoService.todos.filter(t => !t.done).length;
-  }
-
-  get totalCount() {
-    return this.todoService.todos.length;
+  ngOnInit() {
+    const savedMode = localStorage.getItem('darkMode');
+    this.isDarkMode = savedMode === 'true';
+    if (this.isDarkMode) {
+      document.documentElement.classList.add('dark');
+    }
   }
 }

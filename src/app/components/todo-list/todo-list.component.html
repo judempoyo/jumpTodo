@@ -1,9 +1,9 @@
-<div class="min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300"
-     [ngClass]="{ 'dark bg-gray-900': isDarkMode, 'bg-gray-100': !isDarkMode }">
-  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+<div class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300"
+     [ngClass]="{ 'dark bg-gray-900': isDarkMode, 'bg-gray-50': !isDarkMode }">
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
     <!-- Header -->
-    <div class="p-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-      <div class="flex justify-between items-center">
+    <div class="p-6 bg-indigo-600 dark:bg-indigo-800 text-white">
+      <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold">Todo App</h1>
         <button (click)="toggleDarkMode()" class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition">
           {{ isDarkMode ? '☀️' : '🌙' }}
@@ -11,19 +11,19 @@
       </div>
 
       <!-- Input -->
-      <div class="mt-4 flex gap-2">
+      <div class="flex gap-2">
         <input
           [(ngModel)]="newTodoText"
-          (keyup.enter)="addTodo()"
-          (keyup.escape)="cancelEdit()"
-          [placeholder]="editingTodo ? 'Edit todo...' : 'What needs to be done?'"
+          (keyup.enter)="addOrUpdateTodo()"
+          (keyup.escape)="resetEdit()"
+          [placeholder]="editingTodoId ? 'Edit todo...' : 'Add new todo'"
           class="flex-1 p-3 rounded border-none bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
         />
         <button
-          (click)="addTodo()"
+          (click)="addOrUpdateTodo()"
           class="px-4 py-2 bg-white text-indigo-600 rounded font-medium hover:bg-gray-100 transition"
         >
-          {{ editingTodo ? 'Update' : 'Add' }}
+          {{ editingTodoId ? 'Update' : 'Add' }}
         </button>
       </div>
     </div>
@@ -34,14 +34,14 @@
         <li
           @fadeInOut
           (dblclick)="startEdit(todo)"
-          class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer flex items-center gap-3"
-          [class.bg-indigo-50/50]="editingTodo?.id === todo.id"
+          class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition cursor-pointer flex items-center gap-3"
+          [class.bg-indigo-50/50]="editingTodoId === todo.id"
         >
           <input
             type="checkbox"
             [checked]="todo.done"
-            (change)="todoService.toggleTodo(todo.id)"
-            class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            (change)="todoService.toggleTodo(todo.id).subscribe()"
+            class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"
           />
           <span
             class="flex-1"
@@ -51,8 +51,8 @@
             {{ todo.text }}
           </span>
           <button
-            (click)="todoService.deleteTodo(todo.id); $event.stopPropagation()"
-            class="text-gray-400 hover:text-red-500 transition"
+            (click)="todoService.deleteTodo(todo.id).subscribe(); $event.stopPropagation()"
+            class="text-gray-400 hover:text-red-500 transition p-1"
           >
             ✕
           </button>
@@ -66,8 +66,9 @@
 
     <!-- Footer -->
     <div class="p-4 bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-600 dark:text-gray-300 flex justify-between">
-      <span>{{ activeCount }} {{ activeCount === 1 ? 'item' : 'items' }} left</span>
-      <span>Total: {{ totalCount }}</span>
+      <span>{{ todoService.getActiveCount() }} {{ todoService.getActiveCount() === 1 ? 'item' : 'items' }} left</span>
+      <span>Total: {{ todoService.todos.length }}</span>
+      <span>Completed: {{ todoService.getCompletedCount() }}</span>
     </div>
   </div>
 </div>
