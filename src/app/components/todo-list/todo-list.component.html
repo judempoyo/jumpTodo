@@ -1,71 +1,91 @@
-<div class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300"
-     [ngClass]="{ 'dark bg-gray-900': isDarkMode, 'bg-gray-50': !isDarkMode }">
-  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-    <!-- Header -->
-    <div class="p-6 bg-indigo-600 dark:bg-indigo-800 text-white">
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Todo App</h1>
-        <button (click)="toggleDarkMode()" class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition">
-          {{ isDarkMode ? '☀️' : '🌙' }}
-        </button>
-      </div>
+<div class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-      <!-- Input -->
-      <div class="flex gap-2">
-        <input
-          [(ngModel)]="newTodoText"
-          (keyup.enter)="addOrUpdateTodo()"
-          (keyup.escape)="resetEdit()"
-          [placeholder]="editingTodoId ? 'Edit todo...' : 'Add new todo'"
-          class="flex-1 p-3 rounded border-none bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-        />
-        <button
-          (click)="addOrUpdateTodo()"
-          class="px-4 py-2 bg-white text-indigo-600 rounded font-medium hover:bg-gray-100 transition"
-        >
-          {{ editingTodoId ? 'Update' : 'Add' }}
-        </button>
-      </div>
+<div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+ <!-- En-tête -->
+ <div class="p-6 bg-teal-600 dark:bg-teal-800 text-white">
+  <div class="p-6 bg-teal-600 dark:bg-teal-800 text-white">
+    <!-- Conteneur flex pour aligner titre et bouton -->
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Application Todo</h1>
+      <button
+        class="flex transition-transform hover:scale-125 align-middle"
+        (click)="darkMode.set(!darkMode())"
+      >
+        <svg *ngIf="!darkMode()" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+        <svg *ngIf="darkMode()" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </button>
     </div>
 
-    <!-- Todo List -->
-    <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-auto">
-      @for (todo of todoService.todos$ | async; track todo.id) {
-        <li
-        @fadeInOut
-        (click)="handleTodoClick(todo, $event)"
-        class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition cursor-pointer flex items-center gap-3 group"
-        [class.bg-teal-50]="editingTodoId === todo.id">
-          <input
-            type="checkbox"
-            [checked]="todo.done"
-            (change)="todoService.toggleTodo(todo.id).subscribe()"
-            class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"
-          />
-          <span
-            class="flex-1"
-            [class.line-through]="todo.done"
-            [class.text-gray-400]="todo.done">
-            {{ todo.text }}
-          </span>
-          <button
-            (click)="todoService.deleteTodo(todo.id).subscribe(); $event.stopPropagation()"
-            class="text-gray-400 hover:text-red-500 transition p-1">
-            ✕
-          </button>
-        </li>
-      } @empty {
-        <li class="p-8 text-center text-gray-500 dark:text-gray-400">
-          No todos yet. Add one above!
-        </li>
-      }
-    </ul>
 
-    <!-- Footer -->
-    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-600 dark:text-gray-300 flex justify-between">
-      <span>{{ todoService.getActiveCount() }} {{ todoService.getActiveCount() === 1 ? 'item' : 'items' }} left</span>
-      <span>Total: {{ todoService.todos.length }}</span>
-      <span>Completed: {{ todoService.getCompletedCount() }}</span>
-    </div>
-  </div>
+   <div class="flex gap-2">
+     <input
+       [(ngModel)]="newTodoText"
+       (keyup.enter)="addOrUpdateTodo()"
+       (keyup.escape)="resetEdit()"
+       [placeholder]="editingTodoId ? 'Modifier la tâche...' : 'Ajouter une nouvelle tâche'"
+       class="flex-1 p-3 rounded border-none bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+     />
+     <button
+  (click)="addOrUpdateTodo()"
+  class="px-4 py-2 bg-white text-teal-600 rounded font-medium hover:bg-gray-100 transition flex items-center gap-2"
+>
+  <svg *ngIf="editingTodoId" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+  </svg>
+
+  <svg *ngIf="!editingTodoId" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+  </svg>
+
+  <span class="hidden md:inline">
+    {{ editingTodoId ? 'Mettre à jour' : 'Ajouter' }}
+  </span>
+</button>
+   </div>
+ </div>
+
+
+ <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-auto">
+   @for (todo of todoService.todos$ | async; track todo.id) {
+     <li
+     @fadeInOut
+     (click)="handleTodoClick(todo, $event)"
+     class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition cursor-pointer flex items-center gap-3 group"
+     [class.bg-teal-50]="editingTodoId === todo.id">
+       <input
+         type="checkbox"
+         [checked]="todo.done"
+         (change)="todoService.toggleTodo(todo.id).subscribe()"
+         class="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700"
+       />
+       <span
+         class="flex-1"
+         [class.line-through]="todo.done"
+         [class.text-gray-400]="todo.done">
+         {{ todo.text }}
+       </span>
+       <button
+         (click)="todoService.deleteTodo(todo.id).subscribe(); $event.stopPropagation()"
+         class="text-gray-400 hover:text-red-500 transition p-1">
+         ✕
+       </button>
+     </li>
+   } @empty {
+     <li class="p-8 text-center text-gray-500 dark:text-gray-400">
+       Aucune tâche pour le moment. Ajoutez-en une ci-dessus !
+     </li>
+   }
+ </ul>
+
+ <!-- Pied de page -->
+ <div class="p-4 bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-600 dark:text-gray-300 flex justify-between">
+   <span>{{ todoService.getActiveCount() }} {{ todoService.getActiveCount() === 1 ? 'élément' : 'éléments' }} restant(s)</span>
+   <span>Total : {{ todoService.todos.length }}</span>
+   <span>Terminés : {{ todoService.getCompletedCount() }}</span>
+ </div>
+</div>
 </div>
