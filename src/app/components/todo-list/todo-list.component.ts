@@ -29,20 +29,7 @@ export class TodoListComponent {
   editingTodoId: number | null = null;
 
 
-  darkMode = signal<boolean>(
-    JSON.parse(window.localStorage.getItem('darkMode') ?? 'true')
-  );
-
-  @HostBinding('class.dark') get mode() {
-    return this.darkMode();
-  }
-
-  constructor() {
-    effect(() => {
-      window.localStorage.setItem('darkMode', JSON.stringify(this.darkMode()));
-    });
-
-  }
+ 
 
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
