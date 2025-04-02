@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject,  HostBinding, effect, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { NgClass, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
@@ -8,9 +8,9 @@ import { Todo } from '../../services/todo.service';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgClass, FormsModule, AsyncPipe],
+  imports: [NgClass, NgIf, FormsModule, AsyncPipe],
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.css'], 
+  styleUrls: ['./todo-list.component.css'],
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
@@ -26,8 +26,23 @@ import { Todo } from '../../services/todo.service';
 export class TodoListComponent {
   todoService = inject(TodoService);
   newTodoText = '';
-  isDarkMode = false;
   editingTodoId: number | null = null;
+
+
+  darkMode = signal<boolean>(
+    JSON.parse(window.localStorage.getItem('darkMode') ?? 'true')
+  );
+
+  @HostBinding('class.dark') get mode() {
+    return this.darkMode();
+  }
+
+  constructor() {
+    effect(() => {
+      window.localStorage.setItem('darkMode', JSON.stringify(this.darkMode()));
+    });
+
+  }
 
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
@@ -66,17 +81,9 @@ export class TodoListComponent {
     this.newTodoText = '';
   }
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    document.documentElement.classList.toggle('dark', this.isDarkMode);
-    localStorage.setItem('darkMode', this.isDarkMode.toString());
-  }
+
 
   ngOnInit() {
-    const savedMode = localStorage.getItem('darkMode');
-    this.isDarkMode = savedMode === 'true';
-    if (this.isDarkMode) {
-      document.documentElement.classList.add('dark');
-    }
+
   }
 }
