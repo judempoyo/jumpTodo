@@ -42,6 +42,8 @@ export class ThemeService {
   }
 
   private applyTheme() {
-    document.documentElement.className = `${this.currentTheme()}-${this.currentMode()}`;
+    const themeClass = `${this.currentTheme()}-${this.currentMode()}`;
+    console.log('Applying theme class:', themeClass); // Pour débogage
+    document.documentElement.className = themeClass;
   }
 }

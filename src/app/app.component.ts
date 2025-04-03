@@ -1,4 +1,4 @@
-import { Component, inject, HostBinding, effect, signal } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -9,7 +9,7 @@ import { ThemeService } from './services/theme.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TodoListComponent, NgIf,NgClass, PomodoroComponent],
+  imports: [TodoListComponent, NgIf, NgClass, PomodoroComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
@@ -24,27 +24,20 @@ import { ThemeService } from './services/theme.service';
 export class AppComponent {
   title = 'jumpTodo';
   theme = inject(ThemeService);
-  darkMode = signal<boolean>(
-    JSON.parse(window.localStorage.getItem('darkMode') ?? 'true')
-  );
-  animationTrigger = 0;
   fullscreen = inject(FullscreenService);
-
-  @HostBinding('class.dark') get mode() {
-    return this.darkMode();
-  }
+  animationTrigger = 0;
 
   constructor() {
+
     effect(() => {
-      window.localStorage.setItem('darkMode', JSON.stringify(this.darkMode()));
       this.animationTrigger++;
     });
   }
 
   toggleTheme() {
-    this.darkMode.set(!this.darkMode());
+    this.theme.toggleMode();
+    console.log('themes:', this.theme.availableThemes);
   }
-
 
   toggleFullscreen() {
     this.fullscreen.toggleFullscreen();

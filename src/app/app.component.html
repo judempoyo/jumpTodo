@@ -1,16 +1,22 @@
-<div class="min-h-screen min-w-full bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+<div class="min-h-screen min-w-full transition-colors duration-300"
+     [class]="theme.currentMode() === 'dark' ? 'dark' : ''">
 
   <div class="absolute top-4 right-4 z-10 flex gap-2">
+    <!-- Sélecteur de thème -->
     <button *ngFor="let themeName of theme.availableThemes"
     (click)="theme.setTheme(themeName)"
     [class.border-2]="theme.currentTheme() === themeName"
+    [class.border-white]="theme.currentMode() === 'dark'"
+    [class.border-gray-800]="theme.currentMode() === 'light'"
     class="w-8 h-8 rounded-full transition-all"
     [ngClass]="{
       'bg-teal-500': themeName === 'teal',
       'bg-emerald-500': themeName === 'emerald',
       'bg-indigo-500': themeName === 'indigo'
-    }">
-</button>
+    }">ici
+    </button>
+
+    <!-- Bouton Plein écran -->
     <button
       (click)="toggleFullscreen()"
       class="p-2 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl"
@@ -20,15 +26,17 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
       </svg>
     </button>
+
+    <!-- Bouton Mode sombre/clair -->
     <button
-    [@themeSwitch]="animationTrigger"
-    (click)="toggleTheme()"
-    class="p-2 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl"
-    aria-label="Toggle dark mode"
-  >
+      [@themeSwitch]="animationTrigger"
+      (click)="toggleTheme()"
+      class="p-2 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl"
+      aria-label="Toggle dark mode"
+    >
       <div class="relative w-6 h-6">
         <svg
-          *ngIf="!darkMode()"
+          *ngIf="theme.currentMode() === 'light'"
           class="absolute inset-0 w-full h-full text-gray-700 dark:text-gray-200 transition-opacity duration-300"
           fill="none"
           stroke="currentColor"
@@ -37,9 +45,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
 
-
         <svg
-          *ngIf="darkMode()"
+          *ngIf="theme.currentMode() === 'dark'"
           class="absolute inset-0 w-full h-full text-gray-700 dark:text-gray-200 transition-opacity duration-300"
           fill="none"
           stroke="currentColor"
