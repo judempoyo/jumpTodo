@@ -98,13 +98,15 @@ export class TodoListComponent {
   startEdit(todo: Todo) {
     this.editingTodoId = todo.id;
     this.newTodoText = todo.text;
+    this.newTodoPriority = todo.priority;
+    this.newTodoDueDate = todo.dueDate ? new Date(todo.dueDate).toISOString().split('T')[0] : undefined;
+
     setTimeout(() => {
       const inputElement = document.querySelector('input[ngModel]') as HTMLInputElement;
       inputElement?.focus();
       inputElement?.select();
     }, 50);
   }
-
   handleTodoClick(todo: Todo, event: MouseEvent) {
     if (event.detail === 2) {
       this.startEdit(todo);
