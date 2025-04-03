@@ -1,8 +1,12 @@
 # 🚀 JUMPTodo App with Pomodoro Timer
 
 <div align="center">
-  <img src="screenshot-light.png" alt="Light Mode Screenshot" width="45%">
-  <img src="screenshot-dark.png" alt="Dark Mode Screenshot" width="45%">
+
+![Screenshot from 2025-04-03 15-30-27](https://github.com/user-attachments/assets/564579b8-4ce5-45b0-babe-6485f0ccc098)
+![Screenshot from 2025-04-03 15-30-20](https://github.com/user-attachments/assets/f95d5796-ad4d-4008-82b9-fa02f176cb39)
+![Screenshot from 2025-04-03 15-30-00](https://github.com/user-attachments/assets/82215381-9ca7-4b02-a8be-cccd6d4fd4f0)
+![Screenshot from 2025-04-03 14-27-26](https://github.com/user-attachments/assets/1fc998c0-0c60-4816-bec0-f480c5722155)
+
 </div>
 
 ---
