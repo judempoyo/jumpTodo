@@ -2,6 +2,7 @@ import { Component, inject, HostBinding, effect, signal } from '@angular/core';
 import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { FullscreenService } from './services/fullscreen.service'; 
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent {
     JSON.parse(window.localStorage.getItem('darkMode') ?? 'true')
   );
   animationTrigger = 0;
+  fullscreen = inject(FullscreenService); 
 
   @HostBinding('class.dark') get mode() {
     return this.darkMode();
@@ -38,5 +40,10 @@ export class AppComponent {
 
   toggleTheme() {
     this.darkMode.set(!this.darkMode());
+  }
+
+
+  toggleFullscreen() {
+    this.fullscreen.toggleFullscreen();
   }
 }

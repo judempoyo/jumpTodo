@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger, query } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList],
+  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList,ScrollingModule],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
   animations: [
