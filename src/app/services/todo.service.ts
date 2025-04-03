@@ -123,12 +123,40 @@ export class TodoService {
     return of(true);
   }
 
-  reorderTodos(newOrder: Todo[]): Observable<any> {
-    this.todosSubject.next([...newOrder]);
-    this.saveTodos();
-    return of(null);
-  }
+  reorderTodos(newOrder: Todo[]): Observable<void> {
+    // First check if the order actually changed to prevent unnecessary updates
+    const currentIds = this.todos.map(t => t.id).join(',');
+    const newIds = newOrder.map(t => t.id).join(',');
 
+    if (currentIds === newIds) {
+      return of(undefined); // No change needed
+    }
+
+    // Validate the new order
+    if (!Array.isArray(newOrder)) {
+      throw new Error('Invalid todo order provided');
+    }
+
+    if (newOrder.length !== this.todos.length) {
+      throw new Error('Todo count mismatch during reorder');
+    }
+
+    // Create a completely new array to break any potential references
+    const updatedTodos = newOrder.map(todo => ({...todo}));
+
+    // Update state
+    this.todosSubject.next(updatedTodos);
+
+    // Save to storage
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error('Failed to save todos:', error);
+      throw error;
+    }
+
+    return of(undefined);
+  }
   private updateTodos(todos: Todo[]): Observable<Todo[]> {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(todos));
@@ -151,5 +179,5 @@ export class TodoService {
   getTodoById(id: number): Todo | undefined {
     return this.todos.find(todo => todo.id === id);
   }
- 
+
 }

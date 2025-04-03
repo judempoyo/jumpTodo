@@ -51,13 +51,21 @@ export class TodoListComponent {
   newTodoDueDate?: string;
   showDatePicker = false;
 
-  drop(event: CdkDragDrop<Todo[]>) {
+ /*  drop(event: CdkDragDrop<Todo[]>) {
     this.todoService.todos$.subscribe(todos => {
       const todosArray = [...todos];
       moveItemInArray(todosArray, event.previousIndex, event.currentIndex);
       this.todoService.reorderTodos(todosArray).subscribe();
     }).unsubscribe();
-  }
+  } */
+    drop(event: CdkDragDrop<Todo[]>) {
+      const movedItem = this.todoService.todos[event.previousIndex];
+      const newTodos = [...this.todoService.todos];
+      newTodos.splice(event.previousIndex, 1);
+      newTodos.splice(event.currentIndex, 0, movedItem);
+
+      this.todoService.reorderTodos(newTodos).subscribe();
+    }
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
 
