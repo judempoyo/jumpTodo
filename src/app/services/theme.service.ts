@@ -2,48 +2,35 @@ import { Injectable, signal, effect } from '@angular/core';
 
 type Theme = 'teal' | 'emerald' | 'indigo';
 type Mode = 'light' | 'dark';
-
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly THEME_KEY = 'app_theme';
-  private readonly MODE_KEY = 'color_mode';
-
-  currentTheme = signal<Theme>('teal');
-  currentMode = signal<Mode>('light');
+  currentTheme = signal<'teal'|'emerald'|'indigo'>('teal');
+  currentMode = signal<'light'|'dark'>('light');
   availableThemes: Theme[] = ['teal', 'emerald', 'indigo'];
 
   constructor() {
-    // Chargement initial
-    const savedTheme = localStorage.getItem(this.THEME_KEY) as Theme;
-    const savedMode = localStorage.getItem(this.MODE_KEY) as Mode;
-
-    if (savedTheme && this.availableThemes.includes(savedTheme)) {
-      this.currentTheme.set(savedTheme);
-    }
-
-    if (savedMode) {
-      this.currentMode.set(savedMode);
-    }
-
-    // Effet pour sauvegarder les changements
-    effect(() => {
-      localStorage.setItem(this.THEME_KEY, this.currentTheme());
-      localStorage.setItem(this.MODE_KEY, this.currentMode());
-      this.applyTheme();
-    });
+    const savedTheme = localStorage.getItem(this.THEME_KEY);
+    if (savedTheme) this.currentTheme.set(savedTheme as any);
   }
 
-  setTheme(theme: Theme) {
+  setTheme(theme: 'teal'|'emerald'|'indigo') {
     this.currentTheme.set(theme);
+    localStorage.setItem(this.THEME_KEY, theme);
+    this.applyTheme();
   }
 
   toggleMode() {
     this.currentMode.update(mode => mode === 'light' ? 'dark' : 'light');
+    this.applyTheme();
   }
 
   private applyTheme() {
-    const themeClass = `${this.currentTheme()}-${this.currentMode()}`;
-    console.log('Applying theme class:', themeClass); // Pour débogage
-    document.documentElement.className = themeClass;
+    document.documentElement.className = `${this.currentTheme()}-${this.currentMode()}`;
+  }
+
+  getThemeColor(type: 'primary'|'text'|'bg'|'surface') {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(`--${type}-color`);
   }
 }

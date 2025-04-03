@@ -23,6 +23,7 @@ import { ThemeService } from './services/theme.service';
 })
 export class AppComponent {
   title = 'jumpTodo';
+  
   theme = inject(ThemeService);
   fullscreen = inject(FullscreenService);
   animationTrigger = 0;
