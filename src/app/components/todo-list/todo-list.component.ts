@@ -29,6 +29,9 @@ export class TodoListComponent {
   todoService = inject(TodoService);
   newTodoText = '';
   editingTodoId: number | null = null;
+  newTodoPriority: 'low' | 'medium' | 'high' = 'medium';
+  newTodoDueDate?: string;
+  showDatePicker = false;
 
   drop(event: CdkDragDrop<Todo[]>) {
     this.todoService.todos$.subscribe(todos => {
@@ -37,29 +40,61 @@ export class TodoListComponent {
       this.todoService.reorderTodos(todosArray).subscribe();
     }).unsubscribe();
   }
-
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
 
+    const dueDate = this.newTodoDueDate ? new Date(this.newTodoDueDate) : undefined;
+
     if (this.editingTodoId) {
-      this.todoService.updateTodo(this.editingTodoId, this.newTodoText).subscribe({
+      this.todoService.updateTodo(
+        this.editingTodoId,
+        this.newTodoText,
+        this.newTodoPriority,
+        dueDate
+      ).subscribe({
         next: () => this.resetEdit(),
         error: (err) => console.error(err)
       });
     } else {
-      this.todoService.addTodo(this.newTodoText).subscribe({
+      this.todoService.addTodo(
+        this.newTodoText,
+        this.newTodoPriority,
+        dueDate
+      ).subscribe({
         next: () => this.resetEdit(),
         error: (err) => console.error(err)
       });
     }
   }
 
-  handleTodoClick(todo: Todo, event: MouseEvent) {
-    if (event.detail === 2) {
-      this.startEdit(todo);
-    }
+  resetEdit() {
+    this.editingTodoId = null;
+    this.newTodoText = '';
+    this.newTodoPriority = 'medium';
+    this.newTodoDueDate = undefined;
+    this.showDatePicker = false;
   }
 
+  getPriorityClass(priority: string) {
+    return {
+      'low': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+      'medium': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+      'high': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+    }[priority];
+  }
+
+  formatDueDate(date: Date | string | undefined): string {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  }
+
+  isOverdue(todo: Todo): boolean {
+    if (!todo.dueDate || todo.done) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(todo.dueDate) < today;
+  }
   startEdit(todo: Todo) {
     this.editingTodoId = todo.id;
     this.newTodoText = todo.text;
@@ -70,8 +105,10 @@ export class TodoListComponent {
     }, 50);
   }
 
-  resetEdit() {
-    this.editingTodoId = null;
-    this.newTodoText = '';
+  handleTodoClick(todo: Todo, event: MouseEvent) {
+    if (event.detail === 2) {
+      this.startEdit(todo);
+    }
   }
 }
+
