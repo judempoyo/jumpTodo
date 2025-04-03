@@ -18,6 +18,7 @@ export class ThemeService {
     this.currentTheme.set(theme);
     localStorage.setItem(this.THEME_KEY, theme);
     this.applyTheme();
+    console.log('Theme set to:', theme);
   }
 
   toggleMode() {
