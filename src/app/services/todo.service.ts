@@ -16,7 +16,58 @@ export interface Todo {
 export class TodoService {
   private readonly STORAGE_KEY = 'angular_todos';
   private todosSubject = new BehaviorSubject<Todo[]>([]);
-  todos$ = this.todosSubject.asObservable();
+  todos$ = this.todosSubject.asObservable().pipe(
+    map(() => this.getSortedTodos())
+  );
+  private currentSort: { field: keyof Todo, direction: 'asc' | 'desc' } = { field: 'createdAt', direction: 'desc' };
+
+  getSortedTodos(): Todo[] {
+    const todos = [...this.todos];
+
+    return todos.sort((a, b) => {
+      if (a[this.currentSort.field] instanceof Date && b[this.currentSort.field] instanceof Date) {
+        const dateA = a[this.currentSort.field] as Date;
+        const dateB = b[this.currentSort.field] as Date;
+        return this.currentSort.direction === 'asc'
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime();
+      }
+
+
+      if (this.currentSort.field === 'priority') {
+        const priorityOrder = { high: 3, medium: 2, low: 1 };
+        const aPriority = priorityOrder[a.priority];
+        const bPriority = priorityOrder[b.priority];
+        return this.currentSort.direction === 'asc'
+          ? aPriority - bPriority
+          : bPriority - aPriority;
+      }
+
+      if ((a[this.currentSort.field] ?? '') < (b[this.currentSort.field] ?? '')) {
+        return this.currentSort.direction === 'asc' ? -1 : 1;
+      }
+      if ((a[this.currentSort.field] ?? '') > (b[this.currentSort.field] ?? '')) {
+        return this.currentSort.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  toggleSort(field: keyof Todo): void {
+    if (this.currentSort.field === field) {
+      this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.currentSort.field = field;
+      this.currentSort.direction = 'asc';
+    }
+
+
+    this.todosSubject.next([...this.todos]);
+  }
+
+  getCurrentSort(): { field: keyof Todo, direction: 'asc' | 'desc' } {
+    return this.currentSort;
+  }
 
   get todos(): Todo[] {
     return this.todosSubject.value;
@@ -141,12 +192,12 @@ export class TodoService {
     }
 
 
-    const updatedTodos = newOrder.map(todo => ({...todo}));
+    const updatedTodos = newOrder.map(todo => ({ ...todo }));
 
 
     this.todosSubject.next(updatedTodos);
 
-  
+
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedTodos));
     } catch (error) {

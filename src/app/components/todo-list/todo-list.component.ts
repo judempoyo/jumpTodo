@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { NgClass, AsyncPipe, NgIf } from '@angular/common';
+import { NgClass, AsyncPipe, NgIf,NgFor, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger, query } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
@@ -9,7 +9,16 @@ import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrollin
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList,CdkVirtualScrollViewport, ScrollingModule],
+  imports: [NgClass,
+    NgIf,
+    FormsModule,
+    AsyncPipe,
+    CdkDrag,
+    CdkDropList,
+    CdkVirtualScrollViewport,
+    ScrollingModule,
+    NgFor,
+    TitleCasePipe],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
   animations: [
@@ -50,22 +59,24 @@ export class TodoListComponent {
   newTodoPriority: 'low' | 'medium' | 'high' = 'medium';
   newTodoDueDate?: string;
   showDatePicker = false;
+  sortFields: (keyof Todo)[] = ['priority', 'dueDate', 'createdAt', 'text'];
 
- /*  drop(event: CdkDragDrop<Todo[]>) {
-    this.todoService.todos$.subscribe(todos => {
-      const todosArray = [...todos];
-      moveItemInArray(todosArray, event.previousIndex, event.currentIndex);
-      this.todoService.reorderTodos(todosArray).subscribe();
-    }).unsubscribe();
-  } */
-    drop(event: CdkDragDrop<Todo[]>) {
-      const movedItem = this.todoService.todos[event.previousIndex];
-      const newTodos = [...this.todoService.todos];
-      newTodos.splice(event.previousIndex, 1);
-      newTodos.splice(event.currentIndex, 0, movedItem);
 
-      this.todoService.reorderTodos(newTodos).subscribe();
-    }
+  toggleSort(field: keyof Todo) {
+    this.todoService.toggleSort(field);
+  }
+
+  get currentSort() {
+    return this.todoService.getCurrentSort();
+  }
+  drop(event: CdkDragDrop<Todo[]>) {
+    const movedItem = this.todoService.todos[event.previousIndex];
+    const newTodos = [...this.todoService.todos];
+    newTodos.splice(event.previousIndex, 1);
+    newTodos.splice(event.currentIndex, 0, movedItem);
+
+    this.todoService.reorderTodos(newTodos).subscribe();
+  }
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
 
