@@ -6,6 +6,8 @@ export interface Todo {
   id: number;
   text: string;
   done: boolean;
+  priority: 'low' | 'medium' | 'high';
+  dueDate?: Date | string;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -41,55 +43,37 @@ export class TodoService {
     }
   }
 
-  addTodo(text: string): Observable<Todo> {
-    if (!text.trim()) {
-      throw new Error('Todo text cannot be empty');
-    }
-
+    addTodo(text: string, priority: 'low' | 'medium' | 'high' = 'medium', dueDate?: Date): Observable<Todo> {
     const newTodo: Todo = {
       id: Date.now(),
       text,
       done: false,
-      createdAt: new Date()
+      priority,
+      dueDate,
+      createdAt: new Date(),
     };
-
-    return this.updateTodos([...this.todos, newTodo]).pipe(
-      map(todos => todos.find(t => t.id === newTodo.id)!),
-      tap(() => console.log('Todo added successfully')),
-      catchError(error => {
-        console.error('Error adding todo:', error);
-        throw error;
-      })
-    );
+    this.todosSubject.next([...this.todos, newTodo]);
+    return of(newTodo);
   }
 
-  updateTodo(id: number, newText: string): Observable<Todo> {
-    if (!newText.trim()) {
-      throw new Error('Todo text cannot be empty');
-    }
-
+  updateTodo(id: number, text: string, priority?: 'low' | 'medium' | 'high', dueDate?: Date): Observable<void> {
     const updatedTodos = this.todos.map(todo =>
-      todo.id === id
-        ? {
-            ...todo,
-            text: newText,
-            updatedAt: new Date()
-          }
-        : todo
+      todo.id === id ? { ...todo, text, priority: priority ?? todo.priority, dueDate } : todo
     );
+    this.todosSubject.next(updatedTodos);
+    return of(undefined);
+  }
 
-    const updatedTodo = updatedTodos.find(t => t.id === id);
-    if (!updatedTodo) {
-      throw new Error('Todo not found');
-    }
+  getTodosByPriority(): Todo[] {
+    const priorityOrder = { high: 3, medium: 2, low: 1 };
+    return [...this.todos].sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
+  }
 
-    return this.updateTodos(updatedTodos).pipe(
-      map(() => updatedTodo),
-      tap(() => console.log('Todo updated successfully')),
-      catchError(error => {
-        console.error('Error updating todo:', error);
-        throw error;
-      })
+  getOverdueTodos(): Todo[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return this.todos.filter(todo =>
+      todo.dueDate && new Date(todo.dueDate) < today && !todo.done
     );
   }
 
