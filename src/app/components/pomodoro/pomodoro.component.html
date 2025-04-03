@@ -1,72 +1,90 @@
-<div class="fixed bottom-6 right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-5 rounded-2xl shadow-2xl z-50 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:shadow-3xl hover:scale-[1.02]"
-[class.pomodoro-pulse]="pomodoro.isRunning() && pomodoro.timer() < 10"
-[class.border-red-500]="pomodoro.mode() === 'work' && pomodoro.timer() < 30"
-[class.border-green-500]="pomodoro.mode() === 'break' && pomodoro.timer() < 30">
-  <!-- Timer Display -->
+<button (click)="toggleVisibility()"
+  class="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-teal-600 text-white shadow-lg hover:bg-teal-500 transition-all"
+  *ngIf="!isVisible()">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+</button>
+
+
+<div
+  class="fixed bottom-6 right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-5 rounded-2xl shadow-2xl z-50 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:shadow-3xl hover:scale-[1.02]"
+  [class.pomodoro-pulse]="pomodoro.isRunning() && pomodoro.timer() < 10"
+  [class.border-red-500]="pomodoro.mode() === 'work' && pomodoro.timer() < 30"
+  [class.border-green-500]="pomodoro.mode() === 'break' && pomodoro.timer() < 30" [class.hidden]="!isVisible()">
+
+  <button (click)="toggleVisibility()"
+    class="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
   <div class="flex flex-col items-center mb-4">
     <!-- Circular Progress -->
     <div class="relative w-24 h-24 mb-3">
       <svg class="w-full h-full" viewBox="0 0 100 100">
-        <!-- Background circle -->
-        <circle cx="50" cy="50" r="45" stroke-width="8"
-                class="stroke-gray-200 dark:stroke-gray-700 fill-none"/>
+
+        <circle cx="50" cy="50" r="45" stroke-width="8" class="stroke-gray-200 dark:stroke-gray-700 fill-none" />
         <!-- Progress circle -->
         <circle cx="50" cy="50" r="45" stroke-width="8"
-                [class]="pomodoro.mode() === 'work' ? 'stroke-red-500' : 'stroke-green-500'"
-                [attr.stroke-dasharray]="'283 ' + (283 * (pomodoro.timer() / (pomodoro.mode() === 'work' ? 1500 : 300)))"
-                class="fill-none transition-all duration-1000 ease-[cubic-bezier(0.65,0,0.35,1)]"
-                stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          [class]="pomodoro.mode() === 'work' ? 'stroke-red-500' : 'stroke-green-500'"
+          [attr.stroke-dasharray]="'283 ' + (283 * (pomodoro.timer() / (pomodoro.mode() === 'work' ? 1500 : 300)))"
+          class="fill-none transition-all duration-1000 ease-[cubic-bezier(0.65,0,0.35,1)]" stroke-linecap="round"
+          transform="rotate(-90 50 50)" />
       </svg>
 
-      <!-- Time Text -->
+
       <div class="absolute inset-0 flex items-center justify-center flex-col">
         <div class="text-2xl font-mono font-bold tracking-tighter
                    [text-shadow:0_2px_4px_rgba(0,0,0,0.1)]
                    dark:[text-shadow:0_2px_4px_rgba(0,0,0,0.3)]
                    transition-all duration-300"
-             [class]="pomodoro.mode() === 'work' ? 'text-red-500' : 'text-green-500'">
+          [class]="pomodoro.mode() === 'work' ? 'text-red-500' : 'text-green-500'">
           {{ pomodoro.formattedTime }}
         </div>
       </div>
     </div>
 
-    <!-- Mode Indicator -->
+
     <div class="px-3 py-1 rounded-full text-xs font-semibold tracking-wide
-                transition-all duration-300"
-         [class]="pomodoro.mode() === 'work'
+                transition-all duration-300" [class]="pomodoro.mode() === 'work'
                   ? 'bg-red-100/80 text-red-700 dark:bg-red-900/50 dark:text-red-300'
                   : 'bg-green-100/80 text-green-700 dark:bg-green-900/50 dark:text-green-300'">
       {{ pomodoro.mode() === 'work' ? 'TRAVAIL' : 'PAUSE' }}
     </div>
   </div>
 
-  <!-- Controls -->
+
   <div class="flex justify-center gap-3">
-    <!-- Start/Pause Button -->
-    <button (click)="pomodoro.isRunning() ? pomodoro.pause() : pomodoro.start()"
-            class="p-3 rounded-full shadow-lg transition-all duration-300
-                   hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2"
-            [class]="pomodoro.isRunning()
+
+    <button (click)="pomodoro.isRunning() ? pomodoro.pause() : pomodoro.start()" class="p-3 rounded-full shadow-lg transition-all duration-300
+                   hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2" [class]="pomodoro.isRunning()
                      ? 'bg-red-500 hover:bg-red-600 focus:ring-red-500/50 dark:focus:ring-red-600/50'
                      : 'bg-green-500 hover:bg-green-600 focus:ring-green-500/50 dark:focus:ring-green-600/50'">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path *ngIf="pomodoro.isRunning()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        <path *ngIf="!pomodoro.isRunning()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path *ngIf="pomodoro.isRunning()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path *ngIf="!pomodoro.isRunning()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
       </svg>
     </button>
 
-    <!-- Reset Button -->
-    <button (click)="pomodoro.reset()"
-            class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600
+
+    <button (click)="pomodoro.reset()" class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600
                    shadow-lg transition-all duration-300 hover:scale-110 active:scale-95
                    focus:outline-none focus:ring-2 focus:ring-gray-500/50 dark:focus:ring-gray-600/50">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
       </svg>
     </button>
   </div>
 
-  <!-- Session Info -->
+
   <div *ngIf="pomodoro.mode() === 'work'" class="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
     Prochaine pause dans: {{ pomodoro.timer() | number:'1.0-0' }}s
   </div>

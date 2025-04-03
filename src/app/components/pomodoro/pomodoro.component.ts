@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PomodoroService } from '../../services/pomodoro.service';
 
 @Component({
@@ -10,4 +10,8 @@ import { PomodoroService } from '../../services/pomodoro.service';
 })
 export class PomodoroComponent {
   pomodoro = inject(PomodoroService);
+  isVisible = signal(false);
+  toggleVisibility() {
+    this.isVisible.update(v => !v); 
+  }
 }
