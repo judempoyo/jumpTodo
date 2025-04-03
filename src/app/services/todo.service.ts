@@ -124,15 +124,14 @@ export class TodoService {
   }
 
   reorderTodos(newOrder: Todo[]): Observable<void> {
-    // First check if the order actually changed to prevent unnecessary updates
     const currentIds = this.todos.map(t => t.id).join(',');
     const newIds = newOrder.map(t => t.id).join(',');
 
     if (currentIds === newIds) {
-      return of(undefined); // No change needed
+      return of(undefined);
     }
 
-    // Validate the new order
+
     if (!Array.isArray(newOrder)) {
       throw new Error('Invalid todo order provided');
     }
@@ -141,13 +140,13 @@ export class TodoService {
       throw new Error('Todo count mismatch during reorder');
     }
 
-    // Create a completely new array to break any potential references
+
     const updatedTodos = newOrder.map(todo => ({...todo}));
 
-    // Update state
+
     this.todosSubject.next(updatedTodos);
 
-    // Save to storage
+  
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedTodos));
     } catch (error) {
