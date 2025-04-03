@@ -31,36 +31,55 @@ export class TodoService {
       const savedTodos = localStorage.getItem(this.STORAGE_KEY);
       if (savedTodos) {
         const todos = JSON.parse(savedTodos);
-        this.todosSubject.next(todos.map((todo: any) => ({
+        const parsedTodos = todos.map((todo: any) => ({
           ...todo,
+          priority: todo.priority || 'medium',
           createdAt: new Date(todo.createdAt),
-          updatedAt: todo.updatedAt ? new Date(todo.updatedAt) : undefined
-        })));
+          updatedAt: todo.updatedAt ? new Date(todo.updatedAt) : undefined,
+          dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined
+        }));
+        this.todosSubject.next(parsedTodos);
       }
     } catch (error) {
       console.error('Failed to load todos:', error);
       this.todosSubject.next([]);
     }
   }
+  private saveTodos(): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.todos));
+    } catch (error) {
+      console.error('Failed to save todos:', error);
+    }
+  }
 
-    addTodo(text: string, priority: 'low' | 'medium' | 'high' = 'medium', dueDate?: Date): Observable<Todo> {
+  addTodo(text: string, priority: 'low' | 'medium' | 'high' = 'medium', dueDate?: Date): Observable<Todo> {
     const newTodo: Todo = {
       id: Date.now(),
       text,
       done: false,
       priority,
       dueDate,
-      createdAt: new Date(),
+      createdAt: new Date()
     };
-    this.todosSubject.next([...this.todos, newTodo]);
+    const updatedTodos = [...this.todos, newTodo];
+    this.todosSubject.next(updatedTodos);
+    this.saveTodos();
     return of(newTodo);
   }
 
   updateTodo(id: number, text: string, priority?: 'low' | 'medium' | 'high', dueDate?: Date): Observable<void> {
     const updatedTodos = this.todos.map(todo =>
-      todo.id === id ? { ...todo, text, priority: priority ?? todo.priority, dueDate } : todo
+      todo.id === id ? {
+        ...todo,
+        text,
+        priority: priority ?? todo.priority,
+        dueDate,
+        updatedAt: new Date()
+      } : todo
     );
     this.todosSubject.next(updatedTodos);
+    this.saveTodos();
     return of(undefined);
   }
 
@@ -79,13 +98,11 @@ export class TodoService {
 
   toggleTodo(id: number): Observable<Todo> {
     const updatedTodos = this.todos.map(todo =>
-      todo.id === id
-        ? {
-            ...todo,
-            done: !todo.done,
-            updatedAt: new Date()
-          }
-        : todo
+      todo.id === id ? {
+        ...todo,
+        done: !todo.done,
+        updatedAt: new Date()
+      } : todo
     );
 
     const updatedTodo = updatedTodos.find(t => t.id === id);
@@ -93,26 +110,23 @@ export class TodoService {
       throw new Error('Todo not found');
     }
 
-    return this.updateTodos(updatedTodos).pipe(
-      map(() => updatedTodo),
-      tap(() => console.log('Todo toggled successfully')),
-      catchError(error => {
-        console.error('Error toggling todo:', error);
-        throw error;
-      })
-    );
+    this.todosSubject.next(updatedTodos);
+    this.saveTodos();
+    return of(updatedTodo);
   }
+
 
   deleteTodo(id: number): Observable<boolean> {
     const updatedTodos = this.todos.filter(todo => todo.id !== id);
-    return this.updateTodos(updatedTodos).pipe(
-      map(() => true),
-      tap(() => console.log('Todo deleted successfully')),
-      catchError(error => {
-        console.error('Error deleting todo:', error);
-        throw error;
-      })
-    );
+    this.todosSubject.next(updatedTodos);
+    this.saveTodos();
+    return of(true);
+  }
+
+  reorderTodos(newOrder: Todo[]): Observable<any> {
+    this.todosSubject.next([...newOrder]);
+    this.saveTodos();
+    return of(null);
   }
 
   private updateTodos(todos: Todo[]): Observable<Todo[]> {
@@ -137,8 +151,5 @@ export class TodoService {
   getTodoById(id: number): Todo | undefined {
     return this.todos.find(todo => todo.id === id);
   }
-  reorderTodos(newOrder: Todo[]): Observable<any> {
-    this.todosSubject.next([...newOrder]);
-    return of(null);
-  }
+ 
 }
