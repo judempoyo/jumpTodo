@@ -40,6 +40,7 @@ import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk
   ]
 })
 export class TodoListComponent {
+  title = 'jumpTodo';
   todoService = inject(TodoService);
   newTodoText = '';
   editingTodoId: number | null = null;

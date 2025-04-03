@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="px-4 sm:px-6">
         <div class="flex justify-between items-center mb-4">
-          <h1 class="text-xl sm:text-2xl font-bold">Application Todo</h1>
+          <h1 class="text-xl sm:text-2xl font-bold">{{ title }}</h1>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-2 mb-4">
@@ -77,7 +77,7 @@
         <li @fadeInOut
             cdkDrag
             (click)="handleTodoClick(todo, $event)"
-            @itemHover="todo.done ? 'active' : 'inactive'"
+            [@itemHover]="todo.done ? 'active' : 'inactive'"
     [@completeAnimation]="todoService.getCompletedCount()"
     [class.done]="todo.done"
             class="p-3 sm:p-4 hover:bg-gray-900/20 dark:hover:bg-teal-900/20 transition-all duration-200 cursor-pointer flex items-start sm:items-center gap-2 sm:gap-3 group

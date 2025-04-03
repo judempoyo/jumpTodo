@@ -8,7 +8,6 @@
     aria-label="Toggle dark mode"
   >
       <div class="relative w-6 h-6">
-        <!-- Icône de lune (dark mode) -->
         <svg
           *ngIf="!darkMode()"
           class="absolute inset-0 w-full h-full text-gray-700 dark:text-gray-200 transition-opacity duration-300"
@@ -19,7 +18,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
 
-        <!-- Icône soleil (light mode) -->
+
         <svg
           *ngIf="darkMode()"
           class="absolute inset-0 w-full h-full text-gray-700 dark:text-gray-200 transition-opacity duration-300"
@@ -33,6 +32,5 @@
     </button>
   </div>
 
-  <!-- Contenu principal -->
   <app-todo-list></app-todo-list>
 </div>
