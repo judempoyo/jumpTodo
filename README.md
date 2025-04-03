@@ -35,8 +35,8 @@ Application de gestion de tâches moderne avec minuterie Pomodoro intégrée, co
 ### ⚙️ Installation
 1. **Cloner le dépôt :**
    ```bash
-   git clone https://github.com/votre-utilisateur/todo-pomodoro.git
-   cd todo-pomodoro
+   git clone https://github.com/judempoyo/jumpTodo.git
+   cd jumpTodo
    ```
 
 2. **Installer les dépendances :**
@@ -84,8 +84,8 @@ Modern task management application with a built-in Pomodoro timer, designed for 
 ### ⚙️ Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/todo-pomodoro.git
-   cd todo-pomodoro
+   git clone https://github.com/judempoyo/jumpTodo.git
+   cd jumpTodo
    ```
 
 2. **Install dependencies:**
@@ -113,4 +113,4 @@ Modern task management application with a built-in Pomodoro timer, designed for 
 ---
 
 ## 📜 License
-MIT © [Your Name] 2023
+MIT &copy; [Jude MPoyo] 2025
