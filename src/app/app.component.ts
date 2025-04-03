@@ -1,5 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
-import { NgClass, AsyncPipe, NgIf } from '@angular/common';
+import { NgClass, AsyncPipe, NgIf, NgFor } from '@angular/common';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FullscreenService } from './services/fullscreen.service';
@@ -9,7 +9,7 @@ import { ThemeService } from './services/theme.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TodoListComponent, NgIf, NgClass, PomodoroComponent],
+  imports: [TodoListComponent, NgIf, NgClass,NgFor, PomodoroComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
