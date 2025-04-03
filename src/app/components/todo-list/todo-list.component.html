@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <cdk-virtual-scroll-viewport itemSize="80" class="h-[500px] w-full divide-y">
+      <cdk-virtual-scroll-viewport itemSize="96" class="h-[500px] w-full divide-y">
         <ul cdkDropList (cdkDropListDropped)="drop($event)" class="divide-y divide-gray-200/80 dark:divide-gray-700/80">
           @for (todo of todoService.todos$ | async; track todo.id) {
           <li @fadeInOut cdkDrag cdkVirtualFor="let todo of todoService.todos$ | async"
