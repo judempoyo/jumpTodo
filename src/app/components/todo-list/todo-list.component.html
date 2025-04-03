@@ -75,10 +75,9 @@
         </div>
       </div>
 
-      <cdk-virtual-scroll-viewport itemSize="68" class="max-h-96 divide-y">
-        <ul cdkDropList (cdkDropListDropped)="drop($event)"
-          class="divide-y divide-gray-200/80 dark:divide-gray-700/80 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-          @for (todo of todoService.todos$ | async; track todo.id; let i = $index) {
+      <cdk-virtual-scroll-viewport itemSize="80" class="h-[500px] w-full divide-y">
+        <ul cdkDropList (cdkDropListDropped)="drop($event)" class="divide-y divide-gray-200/80 dark:divide-gray-700/80">
+          @for (todo of todoService.todos$ | async; track todo.id) {
           <li @fadeInOut cdkDrag cdkVirtualFor="let todo of todoService.todos$ | async"
             (click)="handleTodoClick(todo, $event)" [@itemHover]="todo.done ? 'active' : 'inactive'"
             [@completeAnimation]="todoService.getCompletedCount()" [class.done]="todo.done" class="h-16 p-3 sm:p-4 hover:bg-gray-900/20 dark:hover:bg-teal-900/20 transition-all duration-200 cursor-pointer flex items-start sm:items-center gap-2 sm:gap-3 group

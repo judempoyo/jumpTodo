@@ -1,15 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger, query } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList,ScrollingModule],
+  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList,CdkVirtualScrollViewport, ScrollingModule],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
   animations: [
@@ -41,6 +41,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   ]
 })
 export class TodoListComponent {
+
+  @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
   title = 'jumpTodo';
   todoService = inject(TodoService);
   newTodoText = '';
