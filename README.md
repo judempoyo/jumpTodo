@@ -1,59 +1,116 @@
-# JumpTodo
+# 🚀 JUMPTodo App with Pomodoro Timer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+<div align="center">
+  <img src="screenshot-light.png" alt="Light Mode Screenshot" width="45%">
+  <img src="screenshot-dark.png" alt="Dark Mode Screenshot" width="45%">
+</div>
 
-## Development server
+---
 
-To start a local development server, run:
+## 🌍 Langues / Languages
+- [Français](#🇫🇷-français)
+- [English](#🇬🇧-english)
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🇫🇷 Français
 
-## Code scaffolding
+### 📝 Description
+Application de gestion de tâches moderne avec minuterie Pomodoro intégrée, conçue pour une productivité optimale.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### ✨ Fonctionnalités principales
+| Fonctionnalité               | Description                                  |
+|------------------------------|---------------------------------------------|
+| ✅ Gestion des tâches        | Ajout, édition, suppression et organisation |
+| 🎨 Thèmes personnalisables   | 3 couleurs (bleu, violet, rose) + mode sombre |
+| ⏱ Pomodoro intégré          | Cycles de 25min travail / 5min pause        |
+| 📱 Responsive design         | Adapté à tous les écrans                    |
+| ✨ Animations fluides        | Expérience utilisateur agréable             |
 
-```bash
-ng generate component component-name
-```
+### 🛠 Technologies utilisées
+- ![Angular](https://img.shields.io/badge/Angular-16+-DD0031?logo=angular)
+- ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.3.0-38B2AC?logo=tailwind-css)
+- ![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-3178C6?logo=typescript)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### ⚙️ Installation
+1. **Cloner le dépôt :**
+   ```bash
+   git clone https://github.com/votre-utilisateur/todo-pomodoro.git
+   cd todo-pomodoro
+   ```
 
-```bash
-ng generate --help
-```
+2. **Installer les dépendances :**
+   ```bash
+   npm install
+   ```
 
-## Building
+3. **Lancer l'application :**
+   ```bash
+   ng serve 
+   ```
+4. **Ouvrir dans votre navigateur :**
+   ```
+   http://localhost:4200
+   ```
 
-To build the project run:
+### 🎮 Comment utiliser
+- **Ajouter une tâche :** Saisissez votre tâche et appuyez sur Entrée.
+- **Éditer une tâche :** Double-cliquez sur une tâche.
+- **Définir des priorités :** Sélectionnez (Faible, Moyenne, Haute).
+- **Pomodoro :** Activez le timer via le bouton en bas à droite.
+- **Changer de thème :** Utilisez le sélecteur en haut.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🇬🇧 English
 
-## Running unit tests
+### 📝 Description
+Modern task management application with a built-in Pomodoro timer, designed for optimal productivity.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### ✨ Key Features
+| Feature                     | Description                                  |
+|-----------------------------|---------------------------------------------|
+| ✅ Task management          | Add, edit, delete, and organize tasks       |
+| 🎨 Custom themes            | 3 colors (blue, purple, pink) + dark mode   |
+| ⏱ Built-in Pomodoro         | 25min work / 5min break cycles             |
+| 📱 Responsive design         | Adapted to all screen sizes                |
+| ✨ Smooth animations         | Pleasant user experience                   |
 
-```bash
-ng test
-```
+### 🛠 Technologies Used
+- ![Angular](https://img.shields.io/badge/Angular-16+-DD0031?logo=angular)
+- ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.3.0-38B2AC?logo=tailwind-css)
+- ![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-3178C6?logo=typescript)
 
-## Running end-to-end tests
+### ⚙️ Installation
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/todo-pomodoro.git
+   cd todo-pomodoro
+   ```
 
-For end-to-end (e2e) testing, run:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-ng e2e
-```
+3. **Run the application:**
+   ```bash
+   ng serve
+   ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+4. **Open in your browser:**
+   ```
+   http://localhost:4200
+   ```
 
-## Additional Resources
+### 🎮 How to Use
+- **Add a task:** Type your task and press Enter.
+- **Edit a task:** Double-click on a task.
+- **Set priorities:** Select (Low, Medium, High).
+- **Pomodoro:** Activate the timer via the bottom-right button.
+- **Change themes:** Use the top selector.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 📜 License
+MIT © [Your Name] 2023
