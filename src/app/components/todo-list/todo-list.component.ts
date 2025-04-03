@@ -2,11 +2,9 @@ import { Component, inject } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger, query } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
 import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Observable, of } from 'rxjs';
-
 @Component({
   selector: 'app-todo-list',
   standalone: true,
@@ -21,6 +19,22 @@ import { Observable, of } from 'rxjs';
       ]),
       transition(':leave', [
         animate('150ms ease-in', style({ opacity: 0, transform: 'translateX(20px)' }))
+      ])
+    ]),
+    trigger('completeAnimation', [
+      transition(':increment', [
+        query('li.done', [
+          style({ transform: 'translateX(0)' }),
+          animate('0.5s ease-out',
+            style({ transform: 'translateX(100%)', opacity: 0 }))
+        ], { optional: true })
+      ])
+    ]),
+    trigger('itemHover', [
+      transition(':enter', []),
+      transition(':leave', []),
+      transition('* <=> *', [
+        animate('0.2s ease', style({ transform: 'translateY(-3px)' }))
       ])
     ])
   ]
