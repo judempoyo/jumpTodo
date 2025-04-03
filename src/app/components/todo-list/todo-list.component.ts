@@ -1,14 +1,16 @@
-import { Component, inject,  HostBinding, effect, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { NgClass, AsyncPipe, NgIf} from '@angular/common';
+import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Todo } from '../../services/todo.service';
+import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [NgClass, NgIf, FormsModule, AsyncPipe],
+  imports: [NgClass, NgIf, FormsModule, AsyncPipe, CdkDrag, CdkDropList],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
   animations: [
@@ -28,8 +30,13 @@ export class TodoListComponent {
   newTodoText = '';
   editingTodoId: number | null = null;
 
-
- 
+  drop(event: CdkDragDrop<Todo[]>) {
+    this.todoService.todos$.subscribe(todos => {
+      const todosArray = [...todos];
+      moveItemInArray(todosArray, event.previousIndex, event.currentIndex);
+      this.todoService.reorderTodos(todosArray).subscribe();
+    }).unsubscribe();
+  }
 
   addOrUpdateTodo() {
     if (!this.newTodoText.trim()) return;
@@ -48,7 +55,7 @@ export class TodoListComponent {
   }
 
   handleTodoClick(todo: Todo, event: MouseEvent) {
-    if (event.detail === 2) { // Double-clic
+    if (event.detail === 2) {
       this.startEdit(todo);
     }
   }
@@ -66,11 +73,5 @@ export class TodoListComponent {
   resetEdit() {
     this.editingTodoId = null;
     this.newTodoText = '';
-  }
-
-
-
-  ngOnInit() {
-
   }
 }
