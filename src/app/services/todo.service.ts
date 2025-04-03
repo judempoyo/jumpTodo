@@ -153,4 +153,8 @@ export class TodoService {
   getTodoById(id: number): Todo | undefined {
     return this.todos.find(todo => todo.id === id);
   }
+  reorderTodos(newOrder: Todo[]): Observable<any> {
+    this.todosSubject.next([...newOrder]);
+    return of(null);
+  }
 }
