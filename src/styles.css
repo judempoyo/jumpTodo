@@ -5,3 +5,73 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.teal-light {
+  --primary-50: #f0fdfa;
+  --primary-100: #ccfbf1;
+  --primary-200: #99f6e4;
+  --primary-300: #5eead4;
+  --primary-400: #2dd4bf;
+  --primary-500: #14b8a6;
+  --primary-600: #0d9488;
+  --primary-700: #0f766e;
+  --primary-800: #115e59;
+  --primary-900: #134e4a;
+  --text-primary: #1f2937;
+  --bg-primary: #f8fafc;
+  --surface: #ffffff;
+}
+
+.teal-dark {
+  --primary-50: #042f2e;
+  --primary-100: #134e4a;
+  --primary-200: #0f766e;
+  --primary-300: #0d9488;
+  --primary-400: #14b8a6;
+  --primary-500: #2dd4bf;
+  --primary-600: #5eead4;
+  --primary-700: #99f6e4;
+  --primary-800: #ccfbf1;
+  --primary-900: #f0fdfa;
+  --text-primary: #f3f4f6;
+  --bg-primary: #0f172a;
+  --surface: #1e293b;
+}
+
+
+.emerald-light {
+  --primary-500: #10b981;
+  --primary-600: #059669;
+  --primary-hover: #047857;
+  --text-primary: #1f2937;
+  --bg-primary: #f9fafb;
+  --surface: #ffffff;
+}
+
+.emerald-dark {
+  --primary-500: #34d399;
+  --primary-600: #10b981;
+  --primary-hover: #059669;
+  --text-primary: #f9fafb;
+  --bg-primary: #111827;
+  --surface: #1e293b;
+}
+
+
+.indigo-light {
+  --primary-500: #6366f1;
+  --primary-600: #4f46e5;
+  --primary-hover: #4338ca;
+  --text-primary: #1f2937;
+  --bg-primary: #f9fafb;
+  --surface: #ffffff;
+}
+
+.indigo-dark {
+  --primary-500: #818cf8;
+  --primary-600: #6366f1;
+  --primary-hover: #4f46e5;
+  --text-primary: #f9fafb;
+  --bg-primary: #111827;
+  --surface: #1e293b;
+}
