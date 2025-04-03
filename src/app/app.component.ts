@@ -2,12 +2,13 @@ import { Component, inject, HostBinding, effect, signal } from '@angular/core';
 import { NgClass, AsyncPipe, NgIf } from '@angular/common';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { FullscreenService } from './services/fullscreen.service'; 
+import { FullscreenService } from './services/fullscreen.service';
+import { PomodoroComponent } from './components/pomodoro/pomodoro.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TodoListComponent, NgIf],
+  imports: [TodoListComponent, NgIf,PomodoroComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
@@ -25,7 +26,7 @@ export class AppComponent {
     JSON.parse(window.localStorage.getItem('darkMode') ?? 'true')
   );
   animationTrigger = 0;
-  fullscreen = inject(FullscreenService); 
+  fullscreen = inject(FullscreenService);
 
   @HostBinding('class.dark') get mode() {
     return this.darkMode();
