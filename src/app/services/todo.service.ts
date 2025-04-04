@@ -53,6 +53,10 @@ export class TodoService {
       return 0;
     });
   }
+  setSort(field: keyof Todo, direction: 'asc' | 'desc'): void {
+    this.currentSort = { field, direction };
+    this.todosSubject.next([...this.todos]);
+  }
 
   toggleSort(field: keyof Todo): void {
     if (this.currentSort.field === field) {

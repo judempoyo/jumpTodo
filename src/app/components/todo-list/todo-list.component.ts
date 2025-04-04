@@ -60,15 +60,26 @@ export class TodoListComponent {
   newTodoDueDate?: string;
   showDatePicker = false;
   sortFields: (keyof Todo)[] = ['priority', 'dueDate', 'createdAt', 'text'];
-  currentSortField: keyof Todo = 'priority';
+  showSortDropdown = false;
 
-  // Et modifiez la méthode toggleSort comme suit :
-  toggleSort(field: keyof Todo) {
-    if (this.currentSort.field === field) {
-      this.todoService.toggleSort(field);
-    } else {
-      this.todoService['setSort'](field, 'asc');
+  getSortFieldName(field: keyof Todo): string {
+    return field === 'dueDate' ? 'Date d\'échéance' :
+           field === 'createdAt' ? 'Date de création' :
+           field === 'text' ? 'Texte' :
+           'Priorité';
+  }
+
+  changeSortField(field: keyof Todo) {
+    if (this.currentSort.field !== field) {
+      this.todoService.setSort(field, 'asc');
     }
+    this.showSortDropdown = false;
+  }
+
+  toggleSortDirection() {
+    const newDirection = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+    this.todoService.setSort(this.currentSort.field, newDirection);
+    this.showSortDropdown = false;
   }
 
   get currentSort() {
