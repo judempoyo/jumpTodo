@@ -60,10 +60,15 @@ export class TodoListComponent {
   newTodoDueDate?: string;
   showDatePicker = false;
   sortFields: (keyof Todo)[] = ['priority', 'dueDate', 'createdAt', 'text'];
+  currentSortField: keyof Todo = 'priority';
 
-
+  // Et modifiez la méthode toggleSort comme suit :
   toggleSort(field: keyof Todo) {
-    this.todoService.toggleSort(field);
+    if (this.currentSort.field === field) {
+      this.todoService.toggleSort(field);
+    } else {
+      this.todoService['setSort'](field, 'asc');
+    }
   }
 
   get currentSort() {

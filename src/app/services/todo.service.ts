@@ -14,6 +14,7 @@ export interface Todo {
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
+  [x: string]: any;
   private readonly STORAGE_KEY = 'angular_todos';
   private todosSubject = new BehaviorSubject<Todo[]>([]);
   todos$ = this.todosSubject.asObservable().pipe(
