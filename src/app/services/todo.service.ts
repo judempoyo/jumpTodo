@@ -56,6 +56,7 @@ export class TodoService {
   setSort(field: keyof Todo, direction: 'asc' | 'desc'): void {
     this.currentSort = { field, direction };
     this.todosSubject.next([...this.todos]);
+    this.saveTodos(); 
   }
 
   toggleSort(field: keyof Todo): void {
