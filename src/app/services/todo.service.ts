@@ -14,6 +14,7 @@ export interface Todo {
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
+  [x: string]: any;
   private readonly STORAGE_KEY = 'angular_todos';
   private todosSubject = new BehaviorSubject<Todo[]>([]);
   todos$ = this.todosSubject.asObservable().pipe(
@@ -51,6 +52,11 @@ export class TodoService {
       }
       return 0;
     });
+  }
+  setSort(field: keyof Todo, direction: 'asc' | 'desc'): void {
+    this.currentSort = { field, direction };
+    this.todosSubject.next([...this.todos]);
+    this.saveTodos(); 
   }
 
   toggleSort(field: keyof Todo): void {
