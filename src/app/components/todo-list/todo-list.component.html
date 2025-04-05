@@ -39,7 +39,7 @@
             <button
               (click)="changeSortField('priority')"
               class="flex justify-between items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              [class.bg-teal-50 dark:bg-teal-50]="currentSort.field === 'priority'"
+              [ngClass]="{'bg-teal-50 dark:bg-teal-50': currentSort.field === 'priority'}"
             >
               <div class="flex items-center gap-2">
                 <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,7 +58,7 @@
             <button
               (click)="changeSortField('dueDate')"
               class="flex justify-between items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              [class.bg-teal-50 dark:bg-teal-50]="currentSort.field === 'dueDate'"
+              [ngClass]="{'bg-teal-50 dark:bg-teal-50': currentSort.field === 'dueDate'}"
             >
               <div class="flex items-center gap-2">
                 <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -77,7 +77,7 @@
             <button
               (click)="changeSortField('createdAt')"
               class="flex justify-between items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              [class.bg-teal-50 dark:bg-teal-50]="currentSort.field === 'createdAt'"
+              [ngClass]="{'bg-teal-50 dark:bg-teal-50': currentSort.field === 'createdAt'}"
             >
               <div class="flex items-center gap-2">
                 <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +96,7 @@
             <button
               (click)="changeSortField('text')"
               class="flex justify-between items-center w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              [class.bg-teal-50 dark:bg-teal-50]="currentSort.field === 'text'"
+              [ngClass]="{'bg-teal-50 dark:bg-teal-50': currentSort.field === 'text'}"
             >
               <div class="flex items-center gap-2">
                 <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
